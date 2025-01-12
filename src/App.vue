@@ -1,45 +1,34 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import headbar from "./components/headbar.vue";
-
 </script>
 
 <template>
   <div class="app-container">
-      <el-container class="el-container">
-        <el-header class="header">
-            <headbar />
-        </el-header>
-        <el-main class="main">
-          <RouterView />
-        </el-main>
-      </el-container>
+    <RouterView />
   </div>
 </template>
 <style scoped>
+.el-header,
+.el-footer {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
 
-.el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}
 
-  }
-
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
-
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-
-  }
+.el-main {
+  background-color: #e9eef3;
+  color: #333;
+  text-align: center;
+  line-height: 160px;
+}
 .app-container {
   margin: 0;
   height: 100vh; /* 设置 app-container 高度为视口高度 */
@@ -47,17 +36,17 @@ import headbar from "./components/headbar.vue";
   flex-direction: column; /* 子元素垂直排列 */
   margin: 0;
 }
-.el-container{
+.el-container {
   flex: 1; /* 让 el-container 撑满 app-container */
   display: flex; /* 使用 flex 布局 */
   flex-direction: column; /* 子元素垂直排列 */
   margin: 0;
   padding: 0;
 }
-.header{
+.header {
   height: 60px; /* 设置 header 固定高度 */
 }
-.main{
+.main {
   flex: 1; /* 让 main 撑满剩余空间 */
   margin: 0;
   padding: 0;
