@@ -2,7 +2,7 @@
   <div class="main">
     <el-container class="el-container">
       <el-header class="header">
-        <headbar />
+        <headbar index="3"/>
       </el-header>
       <el-main class="main">
         <Introduce />

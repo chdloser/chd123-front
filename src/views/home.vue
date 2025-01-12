@@ -1,8 +1,7 @@
 <template>
-
-    <headbar />
+    <Headbar index="4"/>
 </template>
 
-<script lang="ts" >
+<script lang="ts" setup>
 import Headbar from '@/components/headbar.vue';
 </script>
