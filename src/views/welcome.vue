@@ -1,10 +1,10 @@
 <template>
-  <div class="main">
-    <el-container class="el-container">
-      <el-header class="header">
+  <div class="main-box">
+    <el-container>
+      <el-header>
         <headbar index="3"/>
       </el-header>
-      <el-main class="main">
+      <el-main>
         <Introduce />
         <div class="btn-box">
           <Login size="large" />
@@ -28,15 +28,11 @@ import headbar from "@/components/headbar.vue";
   align-items: center;
   gap: 30px; /* 按钮之间的间距 */
 }
+.el-header{
+  padding: 0;
+}
 .el-button {
   height: 60px;
-}
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
 }
 
 .el-aside {
@@ -51,30 +47,14 @@ import headbar from "@/components/headbar.vue";
   color: #333;
   text-align: center;
   line-height: 160px;
+  
 }
-.main {
-  margin: 0;
-  height: 100vh; /* 设置 app-container 高度为视口高度 */
+.main-box {
   display: flex; /* 使用 flex 布局 */
   flex-direction: column; /* 子元素垂直排列 */
   margin: 0;
-}
-.el-container {
-  flex: 1; /* 让 el-container 撑满 app-container */
-  display: flex; /* 使用 flex 布局 */
-  flex-direction: column; /* 子元素垂直排列 */
-  margin: 0;
-  padding: 0;
-}
-.header {
-  height: 60px; /* 设置 header 固定高度 */
-}
-.main {
   flex: 1; /* 让 main 撑满剩余空间 */
   margin: 0;
   padding: 0;
-}
-.el-menu--horizontal > .el-menu-item:nth-child(1) {
-  margin-right: auto;
 }
 </style>
