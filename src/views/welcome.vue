@@ -7,7 +7,7 @@
       <el-main>
         <Introduce />
         <div class="btn-box">
-          <Login size="large" />
+          <Login />
           <el-button>浏览</el-button>
         </div>
       </el-main>

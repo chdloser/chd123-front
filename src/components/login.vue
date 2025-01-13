@@ -1,9 +1,9 @@
 <template>
-    <el-button class="login-btn" :size ="size" type="primary" @click="dialogFormVisible = true">登录</el-button>
-    <el-dialog v-model="dialogFormVisible" title="登录" class="login-block">
+    <el-button class="login-btn" type="primary" @click="dialogFormVisible = true">登录</el-button>
+    <el-dialog v-model="dialogFormVisible" title="登录" class="login-block" :rules="rules">
       <el-form :model="form">
         <el-form-item label="账号" :label-width="formLabelWidth">
-          <el-input v-model="form.id" autocomplete="off" />
+          <el-input v-model="form.username" autocomplete="off" />
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
           <el-input v-model="form.password" autocomplete="off" />
@@ -22,19 +22,32 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { defineProps } from "vue";
-const props = defineProps({
-  size: {
-    type: String,
-    default: 'medium' // 默认大小
-  },
-});
 const dialogFormVisible = ref(false);
 const formLabelWidth = "140px";
 
 const form = reactive({
-  id: "",
+  username: "",
   password: "",
+});
+const rules = reactive({
+  name: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+  ],
+  region: [
+    {
+      required: true,
+      message: 'Please select Activity zone',
+      trigger: 'change',
+    },
+  ],
+  count: [
+    {
+      required: true,
+      message: 'Please select Activity count',
+      trigger: 'change',
+    },
+  ],
 });
 </script>
 <style scoped>
