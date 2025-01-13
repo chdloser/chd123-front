@@ -37,7 +37,6 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { defineProps } from 'vue';
 
 const props = defineProps({
   index: String

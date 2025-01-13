@@ -11,11 +11,10 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
-    "codemirror": "^5.65.18",
+    "axios": "^1.7.9",
     "codemirror-editor-vue3": "^2.8.0",
     "element-plus": "^2.9.3",
     "vue": "^3.5.13",
-    "vue-codemirror": "^6.1.1",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

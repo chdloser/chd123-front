@@ -1,12 +1,12 @@
 <template>
    <div class="main-box">
-    <header class="top-bar">
+    <el-header class="top-bar">
       <button @click="handleClick('home')">首页</button>
       <button @click="handleClick('profile')">个人资料</button>
       <button @click="handleClick('settings')">设置</button>
       <button @click="handleClick('help')">帮助</button>
       <button @click="handleClick('logout')">登出</button>
-    </header>
+    </el-header>
   </div>
 </template>
 <script lang="ts" setup>
@@ -23,12 +23,13 @@ console.log(x)
   justify-content: space-between;
   background-color: #ffffff;
   color: rgb(0, 0, 0);
-  padding: 10px;
+  gap:10px
 }
 
 .top-bar button {
   margin-right: 10px;
-  border: none;
+  border:color(srgb red green blue);
+  border-radius: 10px;
   color: rgb(0, 0, 0);
   cursor: pointer;
   padding: 10px;

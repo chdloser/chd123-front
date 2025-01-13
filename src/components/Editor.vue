@@ -2,14 +2,16 @@
   <Codemirror
     v-model:value="code"
     :options="cmOptions"
-    border
+    border 
     ref="cmRef"
     @change="onChange"
     @input="onInput"
     @ready="onReady"
   />
-  <button>提交</button>
-  <button>运行</button>
+  <div class="btn-box">
+    <el-button>提交</el-button>
+    <el-button>运行</el-button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -27,7 +29,6 @@ import "codemirror/mode/javascript/javascript.js";
 import "codemirror/addon/display/placeholder.js";
 // 引入主题 可以从 codemirror/theme/ 下引入多个
 import "codemirror/theme/idea.css";
-
 
 const code = ref(
   `var i = 0;
@@ -61,7 +62,6 @@ const onInput = () => {
 
 const onReady = () => {
   console.log("编辑器准备就绪");
-  cm.focus(); // 聚焦编辑器
 };
 
 onMounted(() => {
@@ -84,5 +84,15 @@ onUnmounted(() => {
   border: 1px solid #ccc;
   height: 400px;
   width: 100%;
+}
+.btn-box{
+  display: flex;
+  gap:10px
+}
+button{
+  width: 88px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: #fff;
 }
 </style>
