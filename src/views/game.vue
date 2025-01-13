@@ -1,6 +1,6 @@
 <template>
   <div class="main-box">
-    <RouterLink to="/home" index="5" class="nav-link"> to home</RouterLink>
+    <RouterLink to="/home" index="3" class="nav-link"> to home</RouterLink>
     <Gamebar class="game-bar"></Gamebar>
     <el-container class="content-container">
       <el-container>

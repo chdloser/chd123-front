@@ -1,6 +1,6 @@
 <template>
   <el-affix :offset="0">
-    <Headbar index="4" />
+    <Headbar index="2" />
   </el-affix>
   <div class="main-box">
     <el-container class="container">
