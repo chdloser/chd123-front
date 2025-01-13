@@ -1,3 +1,4 @@
+import Login from '@/views/login.vue'
 import Game from '@/views/game.vue'
 import Home from '@/views/home.vue'
 import Welcome from '@/views/welcome.vue'
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/game',
       name:'game',
       component:Game
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component:Login
     }
   ],
 })

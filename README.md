@@ -1,3 +1,5 @@
+起始开发环境：node.js -v >= 18.7
+
 # 安装依赖 
 `npm i`
 
@@ -5,3 +7,5 @@
 ```sh
 npm run build
 ```
+# 构建
+`npm run build`
