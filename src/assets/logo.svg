@@ -1,19 +1,11 @@
 <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <!-- 背景圆圈 -->
-    <circle cx="60" cy="60" r="55" fill="#FFD700" />
+    <circle cx="60" cy="60" r="55" fill="#2a82e4" />
 
-    <!-- 书本 -->
-    <rect x="40" y="40" width="40" height="30" fill="#4CAF50" />
-    <rect x="45" y="70" width="30" height="10" fill="#4CAF50" />
+    <rect x="40" y="30" width="40" height="30" fill="#ffffff" />
+    <rect x="45" y="70" width="30" height="10" fill="#ffffff" />
 
-    <!-- 电脑屏幕 -->
-    <rect x="45" y="20" width="30" height="20" fill="#4CAF50" />
-    <rect x="40" y="15" width="40" height="5" fill="#4CAF50" />
+   <rect x="45" y="20" width="30" height="20" fill="#ffffff" />
 
-    <!-- 星星 -->
-    <polygon points="60,30 65,35 70,30 65,25 60,30" fill="#FF5722" />
-    <polygon points="60,30 55,35 50,30 55,25 60,30" fill="#FF5722" />
-
-    <!-- 品牌标识 CHD123 -->
-    <text x="45" y="95" font-family="Arial" font-size="12" fill="#333333" text-anchor="middle">CHD123</text>
+    <polygon points="60,30 65,35 70,30 65,25 60,30" fill="#ffd700" />
+        <text x="60" y="95" font-family="Arial" font-size="12" fill="#333333" text-anchor="middle">CHD123</text>
 </svg>

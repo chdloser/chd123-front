@@ -22,7 +22,7 @@
     height: 60px;
 }
 #chd,#easy{
-    color:rgba(42, 130, 228, 1) ;
+    color:#2a82e4 ;
     margin: 20px;
 }
 .descri{
