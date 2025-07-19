@@ -32,7 +32,7 @@
 import { ref, onMounted } from 'vue';
 import gamebar from '@/components/gamebar.vue';
 import gamedescribe from '@/components/gamedescribe.vue';
-import Editor from '@/components/Editor.vue';
+import Editor from '@/components/EditorBack.vue';
 
 interface Problem {
   id: number;
