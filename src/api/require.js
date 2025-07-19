@@ -1,5 +1,5 @@
 // src/api/request.js
-import http from './';
+import http from "./";
 
 export const get = (url, params = {}) => {
   return http.get(url, { params });

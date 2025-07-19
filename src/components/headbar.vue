@@ -8,21 +8,19 @@
   >
     <img style="width: 100px" src="@/assets/logo.svg" alt="Element logo" />
     <el-menu-item index="1">
-      <el-button>
-        欢迎
-      </el-button>
+      <el-button>欢迎</el-button>
     </el-menu-item>
     <el-menu-item index="2">
-      <el-button> 主页 </el-button>
+      <el-button>主页</el-button>
     </el-menu-item>
     <el-menu-item index="3">
-      <el-button> 判题 </el-button>
+      <el-button>判题</el-button>
     </el-menu-item>
-      <el-sub-menu index="4" class="user-menu">
-        <template #title> <el-avatar :icon="UserFilled" /></template>
-        <el-menu-item index="4-1" disabled>中心</el-menu-item>
-        <el-menu-item index="4-2" disabled>设置</el-menu-item>
-      </el-sub-menu>
+    <el-sub-menu index="4" class="user-menu">
+      <template #title><el-avatar :icon="UserFilled" /></template>
+      <el-menu-item index="4-1" disabled>中心</el-menu-item>
+      <el-menu-item index="4-2" disabled>设置</el-menu-item>
+    </el-sub-menu>
   </el-menu>
 </template>
 
@@ -68,9 +66,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 </script>
 
 <style scoped>
-
 .user-menu {
   margin-left: auto;
 }
-
 </style>

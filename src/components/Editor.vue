@@ -1,98 +1,66 @@
 <template>
-  <Codemirror
-    v-model:value="code"
-    :options="cmOptions"
-    border 
-    ref="cmRef"
-    @change="onChange"
-    @input="onInput"
-    @ready="onReady"
-  />
-  <div class="btn-box">
-    <el-button>提交</el-button>
-    <el-button>运行</el-button>
-  </div>
+  <div ref="editorRef" class="editor-container"></div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import Codemirror from "codemirror-editor-vue3";
-// 引入css文件
-import "codemirror/lib/codemirror.css";
-// placeholder
-import "codemirror/addon/display/placeholder.js";
+import { EditorView } from "@codemirror/view";
+import {basicSetup} from "@codemirror/basic-setup"
 
-// 引入语言模式 可以从 codemirror/mode/ 下引入多个
-import "codemirror/mode/javascript/javascript.js";
-// import "codemirror/mode/go/go.js";
-// placeholder
-import "codemirror/addon/display/placeholder.js";
-// 引入主题 可以从 codemirror/theme/ 下引入多个
-import "codemirror/theme/idea.css";
-
-const code = ref(
-  `var i = 0;
-  for (; i < 9; i++) {
-      console.log(i);
-      // more statements
+import { javascript } from "@codemirror/lang-javascript";
+import { EditorState } from "@codemirror/state";
+const editorRef = ref(null);
+let editorView = null;
+const initEditor = () => {
+  if(typeof editorView.value != "undefined"){
+    editorView.value.destroy();
   }
-  `
-);
-const cmRef = ref();
-const cmOptions = {
-  mode: "text/javascript",
-  theme: "default", // 可以选择其他主题，如 'dracula'
-  lineNumbers: true, // 显示行号
-  lineWrapping: true, // 软换行
-  tabSize: 4, // tab 宽度
-  extraKeys: { "Ctrl-Space": "autocomplete" }, // 启用代码补全
-  hintOptions: {
-    completeSingle: false, // 当匹配只有一项的时候，是否自动补全
+  const jsonString = `{
+  root: true,
+  extends: [
+    "plugin:vue/vue3-essential",
+    "eslint:recommended",
+    "@vue/eslint-config-typescript",
+    "@vue/eslint-config-prettier",
+    "vue-global-api"
+  ],
+  parserOptions: {
+    ecmaVersion: "latest",
   },
-};
+  rules: {
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    endOfLine: "auto",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
+  },
+}`
+  const startState = EditorState.create({
+    doc:jsonString,
+    extensions:[basicSetup,javascript(),josn()],
+  });
+  if(editorRef.value){
+    editorView.value = new EditorView({
+      state:startState,
+      parent:editorRef.value,
+    });
+  }
+}
 
-const onChange = () => {
-  console.log("编辑器内容改变:");
-  console.log("编辑器当前值:");
-};
-
-const onInput = () => {
-  console.log("输入内容:");
-};
-
-const onReady = () => {
-  console.log("编辑器准备就绪");
-};
 
 onMounted(() => {
-  setTimeout(() => {
-    cmRef.value?.refresh();
-  }, 1000);
-  setTimeout(() => {
-    cmRef.value?.cminstance.isClean();
-  }, 3000);
+  initEditor();
 });
 
-onUnmounted(() => {
-  cmRef.value?.destroy();
-});
+// onUnmounted(() => {
+//   if (editorView) {
+//     editorView.destroy();
+//   }
+// });
 </script>
 
 <style scoped>
-/* 可以在这里添加组件的样式 */
-.Codemirror {
-  border: 1px solid #ccc;
+.editor-container {
   height: 400px;
   width: 100%;
-}
-.btn-box{
-  display: flex;
-  gap:10px
-}
-button{
-  width: 88px;
-  height: 30px;
-  border-radius: 20px;
-  background-color: #fff;
 }
 </style>

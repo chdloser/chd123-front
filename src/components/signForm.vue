@@ -49,6 +49,8 @@
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
+import type { FormInstance } from 'element-plus';
+import { login, register } from '@/api';
 function goto(s:string) {
   router.push(s)
 }
@@ -92,7 +94,7 @@ const registerRules = {
   ],
   confirmPassword: [
     { required: true, message: '请确认密码', trigger: 'blur' },
-    { validator: (rule-1, value, callback) => {
+    { validator: (rule: any, value: string, callback: (error?: Error) => void) => {
       if (value !== registerForm.value.password) {
         callback(new Error('两次输入的密码不一致'));
       } else {
@@ -102,15 +104,24 @@ const registerRules = {
   ],
 };
 
-const loginFormRef = ref(null);
-const registerFormRef = ref(null);
+const loginFormRef = ref<FormInstance | null>(null);
+const registerFormRef = ref<FormInstance | null>(null);
 
 const handleLogin = () => {
-  loginFormRef.value.validate((valid) => {
+  if (!loginFormRef.value) return;
+  
+  loginFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      ElMessage.success('登录成功');
+      try {
+        const response = await login(loginForm.value.username, loginForm.value.password);
+        localStorage.setItem('token', response.token);
+        ElMessage.success('登录成功');
+        router.push('/home');
+      } catch (error: any) {
+        ElMessage.error(error.response?.data?.message || '登录失败');
+      }
     } else {
-      ElMessage.error('表单验证失败');
+      ElMessage.error('请填写正确的登录信息');
     }
   });
 };
@@ -120,12 +131,26 @@ const handleRegister = () => {
 };
 
 const handleRegisterSubmit = () => {
-  registerFormRef.value.validate((valid) => {
+  if (!registerFormRef.value) return;
+
+  registerFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
-      ElMessage.success('注册成功');
-      registerDialogVisible.value = false;
+      try {
+        await register(registerForm.value.email, registerForm.value.password);
+        ElMessage.success('注册成功');
+        registerDialogVisible.value = false;
+        // 清空表单
+        registerForm.value = {
+          nickname: '',
+          email: '',
+          password: '',
+          confirmPassword: ''
+        };
+      } catch (error: any) {
+        ElMessage.error(error.response?.data?.message || '注册失败');
+      }
     } else {
-      ElMessage.error('表单验证失败');
+      ElMessage.error('请填写正确的注册信息');
     }
   });
 };

@@ -1,50 +1,124 @@
 <template>
-  <div class="main-box">
-    <RouterLink to="/home" index="3" class="nav-link"> to home</RouterLink>
-    <Gamebar class="game-bar"></Gamebar>
-    <el-container class="content-container">
-      <el-container>
-        <el-aside width="200px">
-          <Gamedescribe></Gamedescribe>
-        </el-aside>
-        <el-main>
-          <Editor></Editor>
-        </el-main>
-      </el-container>
+  <div class="game-container">
+    <!-- 题目工具栏 -->
+    <gamebar 
+      :problem-id="currentProblemId"
+      @change-problem="handleProblemChange"
+    />
+    
+    <el-container class="main-content">
+      <el-aside width="400px">
+        <!-- 题目描述 -->
+        <gamedescribe 
+          :problem="currentProblem"
+          @example-click="handleExampleClick"
+        />
+      </el-aside>
+      
+      <el-main>
+        <!-- 代码编辑器 -->
+        <Editor
+          ref="editorRef"
+          :initial-code="currentProblem?.template || ''"
+          @code-change="handleCodeChange"
+          @submit="handleSubmit"
+        />
+      </el-main>
     </el-container>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Editor from "@/components/Editor.vue";
-import Gamebar from "@/components/gamebar.vue";
-import Gamedescribe from "@/components/gamedescribe.vue";
+import { ref, onMounted } from 'vue';
+import gamebar from '@/components/gamebar.vue';
+import gamedescribe from '@/components/gamedescribe.vue';
+import Editor from '@/components/Editor.vue';
+
+interface Problem {
+  id: number;
+  title: string;
+  description: string;
+  difficulty: string;
+  template: string;
+  examples: Array<{
+    input: string;
+    output: string;
+    explanation?: string;
+  }>;
+}
+
+const currentProblemId = ref<number>(1);
+const currentProblem = ref<Problem | null>(null);
+const editorRef = ref();
+
+// 处理题目切换
+const handleProblemChange = (problemId: number) => {
+  currentProblemId.value = problemId;
+  // TODO: 从API获取题目详情
+  loadProblemDetails(problemId);
+};
+
+// 加载题目详情
+const loadProblemDetails = async (problemId: number) => {
+  try {
+    // TODO: 调用API获取题目详情
+    // const response = await api.getProblemDetails(problemId);
+    // currentProblem.value = response.data;
+  } catch (error) {
+    console.error('Failed to load problem details:', error);
+  }
+};
+
+// 处理示例点击
+const handleExampleClick = (example: any) => {
+  // TODO: 实现测试用例运行逻辑
+};
+
+// 处理代码变更
+const handleCodeChange = (code: string) => {
+  // TODO: 保存代码到本地存储或其他操作
+};
+
+// 处理代码提交
+const handleSubmit = async (code: string, language: string) => {
+  try {
+    // TODO: 实现代码提交逻辑
+    // const response = await api.submitCode({
+    //   problemId: currentProblemId.value,
+    //   code,
+    //   language
+    // });
+  } catch (error) {
+    console.error('Failed to submit code:', error);
+  }
+};
+
+onMounted(() => {
+  // 加载初始题目
+  loadProblemDetails(currentProblemId.value);
+});
 </script>
 
 <style scoped>
-.main-box {
+.game-container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 80vh; /* 整个视口的高度 */
 }
 
-.nav-link, .game-bar {
-  height: 50px; /* 固定高度 */
-  width: 100%; /* 宽度填充整个屏幕 */
-}
-
-.content-container {
-  flex: 1; /* 高度填充剩余屏幕 */
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column; /* 确保子元素垂直排列 */
+.main-content {
+  flex: 1;
+  overflow: hidden;
 }
 
 .el-aside {
-  flex-shrink: 0; /* 防止侧边栏在屏幕缩小时缩小 */
+  border-right: 1px solid #dcdfe6;
+  background: white;
+  overflow-y: auto;
 }
 
 .el-main {
-  flex: 1; /* 主内容区域填充剩余空间 */
+  padding: 0;
+  background: #f5f7fa;
 }
 </style>
