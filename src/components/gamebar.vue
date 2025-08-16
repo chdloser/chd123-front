@@ -3,7 +3,7 @@
     <!-- Logo -->
     <div class="left-section">
       <router-link to="/" class="logo">
-        <el-image src="/logo.png" fit="contain" style="width: 40px; height: 40px;" />
+    <img style="width: 60px" src="@/assets/logo.svg" alt="logo" />
       </router-link>
       
       <!-- 题目列表按钮 -->

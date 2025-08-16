@@ -5,14 +5,14 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { EditorView } from "@codemirror/view";
-import {basicSetup} from "@codemirror/basic-setup"
+import { basicSetup } from "@codemirror/basic-setup";
 
 import { javascript } from "@codemirror/lang-javascript";
 import { EditorState } from "@codemirror/state";
 const editorRef = ref(null);
 let editorView = null;
 const initEditor = () => {
-  if(typeof editorView.value != "undefined"){
+  if (typeof editorView.value != "undefined") {
     editorView.value.destroy();
   }
   const jsonString = `{
@@ -33,19 +33,18 @@ const initEditor = () => {
     endOfLine: "auto",
     "prettier/prettier": ["error", { "endOfLine": "auto" }]
   },
-}`
+}`;
   const startState = EditorState.create({
-    doc:jsonString,
-    extensions:[basicSetup,javascript(),josn()],
+    doc: jsonString,
+    extensions: [basicSetup, javascript(), josn()],
   });
-  if(editorRef.value){
+  if (editorRef.value) {
     editorView.value = new EditorView({
-      state:startState,
-      parent:editorRef.value,
+      state: startState,
+      parent: editorRef.value,
     });
   }
-}
-
+};
 
 onMounted(() => {
   initEditor();

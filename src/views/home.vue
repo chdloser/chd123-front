@@ -7,11 +7,18 @@
       <el-main class="main">
         <h2>推荐题目</h2>
         <div class="recommend-cards">
-          <el-card v-for="problem in recommendProblems" :key="problem.id" class="problem-card">
+          <el-card
+            v-for="problem in recommendProblems"
+            :key="problem.id"
+            class="problem-card"
+          >
             <template #header>
               <div class="card-header">
                 <span>{{ problem.title }}</span>
-                <el-tag :type="getDifficultyType(problem.difficulty)" size="small">
+                <el-tag
+                  :type="getDifficultyType(problem.difficulty)"
+                  size="small"
+                >
                   {{ getDifficultyLabel(problem.difficulty) }}
                 </el-tag>
               </div>
@@ -20,7 +27,11 @@
               <p class="description">{{ problem.description }}</p>
               <div class="card-footer">
                 <el-tag size="small">{{ problem.category }}</el-tag>
-                <el-button type="primary" size="small" @click="goToProblem(problem.id)">
+                <el-button
+                  type="primary"
+                  size="small"
+                  @click="goToProblem(problem.id)"
+                >
                   开始做题
                 </el-button>
               </div>
@@ -53,15 +64,23 @@
 
       <el-aside class="aside">
         <h2>热门题目</h2>
-        <el-card v-for="problem in hotProblems" :key="problem.id" class="hot-problem-card">
+        <el-card
+          v-for="problem in hotProblems"
+          :key="problem.id"
+          class="hot-problem-card"
+        >
           <div class="hot-problem-title">
-            <router-link :to="'/problem/' + problem.id">{{ problem.title }}</router-link>
+            <router-link :to="'/problem/' + problem.id">{{
+              problem.title
+            }}</router-link>
           </div>
           <div class="hot-problem-info">
             <el-tag :type="getDifficultyType(problem.difficulty)" size="small">
               {{ getDifficultyLabel(problem.difficulty) }}
             </el-tag>
-            <span class="submission-count">提交次数：{{ problem.submissionCount }}</span>
+            <span class="submission-count"
+              >提交次数：{{ problem.submissionCount }}</span
+            >
           </div>
         </el-card>
       </el-aside>
@@ -70,10 +89,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import Headbar from '@/components/headbar.vue';
-import { getProblems } from '@/api';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import Headbar from "@/components/headbar.vue";
+import { getProblems } from "@/api";
 
 const router = useRouter();
 const recommendProblems = ref([]);
@@ -86,46 +105,46 @@ const fetchRecommendProblems = async () => {
     const response = await getProblems({ recommend: true, limit: 3 });
     recommendProblems.value = response.data;
   } catch (error) {
-    console.error('获取推荐题目失败', error);
+    console.error("获取推荐题目失败", error);
   }
 };
 
 // 获取最新题目
 const fetchLatestProblems = async () => {
   try {
-    const response = await getProblems({ sort: 'newest', limit: 5 });
+    const response = await getProblems({ sort: "newest", limit: 5 });
     latestProblems.value = response.data;
   } catch (error) {
-    console.error('获取最新题目失败', error);
+    console.error("获取最新题目失败", error);
   }
 };
 
 // 获取热门题目
 const fetchHotProblems = async () => {
   try {
-    const response = await getProblems({ sort: 'hot', limit: 5 });
+    const response = await getProblems({ sort: "hot", limit: 5 });
     hotProblems.value = response.data;
   } catch (error) {
-    console.error('获取热门题目失败', error);
+    console.error("获取热门题目失败", error);
   }
 };
 
 // 难度标签样式
 const getDifficultyType = (difficulty: string) => {
   const types: Record<string, string> = {
-    easy: 'success',
-    medium: 'warning',
-    hard: 'danger'
+    easy: "success",
+    medium: "warning",
+    hard: "danger",
   };
-  return types[difficulty] || 'info';
+  return types[difficulty] || "info";
 };
 
 // 难度标签文本
 const getDifficultyLabel = (difficulty: string) => {
   const labels: Record<string, string> = {
-    easy: '简单',
-    medium: '中等',
-    hard: '困难'
+    easy: "简单",
+    medium: "中等",
+    hard: "困难",
   };
   return labels[difficulty] || difficulty;
 };

@@ -1,20 +1,20 @@
 <template>
   <div class="game-container">
     <!-- 题目工具栏 -->
-    <gamebar 
+    <gamebar
       :problem-id="currentProblemId"
       @change-problem="handleProblemChange"
     />
-    
+
     <el-container class="main-content">
       <el-aside width="400px">
         <!-- 题目描述 -->
-        <gamedescribe 
+        <gamedescribe
           :problem="currentProblem"
           @example-click="handleExampleClick"
         />
       </el-aside>
-      
+
       <el-main>
         <!-- 代码编辑器 -->
         <Editor
@@ -29,10 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import gamebar from '@/components/gamebar.vue';
-import gamedescribe from '@/components/gamedescribe.vue';
-import Editor from '@/components/EditorBack.vue';
+import { ref, onMounted } from "vue";
+import gamebar from "@/components/gamebar.vue";
+import gamedescribe from "@/components/gamedescribe.vue";
+import Editor from "@/components/EditorBack.vue";
 
 interface Problem {
   id: number;
@@ -65,7 +65,7 @@ const loadProblemDetails = async (problemId: number) => {
     // const response = await api.getProblemDetails(problemId);
     // currentProblem.value = response.data;
   } catch (error) {
-    console.error('Failed to load problem details:', error);
+    console.error("Failed to load problem details:", error);
   }
 };
 
@@ -89,7 +89,7 @@ const handleSubmit = async (code: string, language: string) => {
     //   language
     // });
   } catch (error) {
-    console.error('Failed to submit code:', error);
+    console.error("Failed to submit code:", error);
   }
 };
 

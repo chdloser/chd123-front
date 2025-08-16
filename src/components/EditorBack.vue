@@ -1,7 +1,11 @@
 <template>
   <div class="code-section">
     <div class="code-header">
-      <el-select v-model="selectedLanguage" placeholder="选择编程语言" @change="handleLanguageChange">
+      <el-select
+        v-model="selectedLanguage"
+        placeholder="选择编程语言"
+        @change="handleLanguageChange"
+      >
         <el-option
           v-for="lang in languages"
           :key="lang.value"
@@ -13,22 +17,34 @@
         提交代码
       </el-button>
     </div>
-    
+
     <div class="editor-container" ref="editorContainer"></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
-import { EditorState, StateEffect } from '@codemirror/state';
-import type { Extension } from '@codemirror/state';
-import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars } from '@codemirror/view';
-import { defaultKeymap, indentWithTab } from '@codemirror/commands';
-import { javascript } from '@codemirror/lang-javascript';
-import { python } from '@codemirror/lang-python';
-import { cpp } from '@codemirror/lang-cpp';
-import { materialDark } from 'cm6-theme-material-dark';
-import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap, CompletionContext } from '@codemirror/autocomplete';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
+import { EditorState, StateEffect } from "@codemirror/state";
+import type { Extension } from "@codemirror/state";
+import {
+  EditorView,
+  keymap,
+  lineNumbers,
+  highlightActiveLineGutter,
+  highlightSpecialChars,
+} from "@codemirror/view";
+import { defaultKeymap, indentWithTab } from "@codemirror/commands";
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { cpp } from "@codemirror/lang-cpp";
+import { materialDark } from "cm6-theme-material-dark";
+import {
+  autocompletion,
+  completionKeymap,
+  closeBrackets,
+  closeBracketsKeymap,
+  CompletionContext,
+} from "@codemirror/autocomplete";
 import {
   indentUnit,
   syntaxHighlighting,
@@ -37,15 +53,15 @@ import {
   foldGutter,
   foldKeymap,
   indentOnInput,
-  type LanguageSupport
-} from '@codemirror/language';
-import { lintKeymap } from '@codemirror/lint';
-import { searchKeymap } from '@codemirror/search';
-import { history, historyKeymap } from '@codemirror/commands';
+  type LanguageSupport,
+} from "@codemirror/language";
+import { lintKeymap } from "@codemirror/lint";
+import { searchKeymap } from "@codemirror/search";
+import { history, historyKeymap } from "@codemirror/commands";
 
 interface Language {
   label: string;
-  value: 'javascript' | 'python' | 'cpp';
+  value: "javascript" | "python" | "cpp";
 }
 
 const props = defineProps<{
@@ -53,19 +69,20 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'submit', code: string, language: string): void;
-  (e: 'code-change', code: string): void;
+  (e: "submit", code: string, language: string): void;
+  (e: "code-change", code: string): void;
 }>();
 
 // 编程语言选项
 const languages: Language[] = [
-  { label: 'JavaScript', value: 'javascript' },
-  { label: 'Python', value: 'python' },
-  { label: 'C++', value: 'cpp' }
+  { label: "JavaScript", value: "javascript" },
+  { label: "Python", value: "python" },
+  { label: "C++", value: "cpp" },
+  { label: "Java", value: "java" },
 ];
 
 // 当前选中的语言
-const selectedLanguage = ref<Language['value']>('javascript');
+const selectedLanguage = ref<Language["value"]>("javascript");
 
 // 编辑器相关
 const editorContainer = ref<HTMLElement | null>(null);
@@ -73,7 +90,7 @@ const editorView = ref<EditorView | null>(null);
 const submitting = ref(false);
 
 // 默认代码模板
-const codeTemplates: Record<Language['value'], string> = {
+const codeTemplates: Record<Language["value"], string> = {
   javascript: `function solution(input) {
   // 在这里写下你的代码
   return
@@ -87,7 +104,7 @@ using namespace std;
 int solution(int input) {
     // 在这里写下你的代码
     return 0;
-}`
+}`,
 };
 
 // 字体大小控制
@@ -97,28 +114,32 @@ const DEFAULT_FONT_SIZE = 14;
 const fontSize = ref(DEFAULT_FONT_SIZE);
 
 // 创建字体大小主题扩展
-const getFontSizeTheme = (size: number) => EditorView.theme({
-  '&': {
-    fontSize: `${size}px`
-  }
-});
+const getFontSizeTheme = (size: number) =>
+  EditorView.theme({
+    "&": {
+      fontSize: `${size}px`,
+    },
+  });
 
 // 字体缩放处理函数
 const handleWheel = (event: WheelEvent) => {
   if ((event.ctrlKey || event.metaKey) && editorView.value) {
     event.preventDefault();
     const delta = event.deltaY > 0 ? -1 : 1;
-    const newSize = Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, fontSize.value + delta));
-    
+    const newSize = Math.min(
+      MAX_FONT_SIZE,
+      Math.max(MIN_FONT_SIZE, fontSize.value + delta)
+    );
+
     if (newSize !== fontSize.value) {
       fontSize.value = newSize;
       const fontSizeTheme = EditorView.theme({
-        '.cm-content': {
-          fontSize: `${newSize}px`
-        }
+        ".cm-content": {
+          fontSize: `${newSize}px`,
+        },
       });
       editorView.value.dispatch({
-        effects: StateEffect.reconfigure.of(fontSizeTheme)
+        effects: StateEffect.reconfigure.of(fontSizeTheme),
       });
     }
   }
@@ -131,61 +152,62 @@ const baseExtensions: Extension[] = [
   highlightSpecialChars(),
   history(),
   foldGutter({
-    openText: '▾',
-    closedText: '▸'
+    openText: "▾",
+    closedText: "▸",
   }),
   materialDark,
   EditorView.theme({
-    '&': {
-      backgroundColor: '#282c34 !important',
-      height: '100%'
+    "&": {
+      backgroundColor: "#282c34 !important",
+      height: "100%",
     },
-    '.cm-content': {
-      color: '#abb2bf !important',
-      caretColor: '#528bff'
+    ".cm-content": {
+      color: "#abb2bf !important",
+      caretColor: "#528bff",
     },
-    '.cm-gutters': {
-      backgroundColor: '#21252b !important',
-      color: '#495162',
-      border: 'none'
+    ".cm-gutters": {
+      backgroundColor: "#21252b !important",
+      color: "#495162",
+      border: "none",
     },
-    '.cm-activeLineGutter': {
-      backgroundColor: '#2c313c !important'
+    ".cm-activeLineGutter": {
+      backgroundColor: "#2c313c !important",
     },
-    '.cm-activeLine': {
-      backgroundColor: '#2c313c !important'
+    ".cm-activeLine": {
+      backgroundColor: "#2c313c !important",
     },
-    '.cm-selectionMatch': {
-      backgroundColor: '#3E4451'
+    ".cm-selectionMatch": {
+      backgroundColor: "#3E4451",
     },
-    '.cm-cursor': {
-      borderLeftColor: '#528bff'
+    ".cm-cursor": {
+      borderLeftColor: "#528bff",
     },
-    '.cm-line': {
-      padding: '0 4px'
+    ".cm-line": {
+      padding: "0 4px",
     },
-    '&.cm-focused .cm-cursor': {
-      borderLeftColor: '#528bff'
+    "&.cm-focused .cm-cursor": {
+      borderLeftColor: "#528bff",
     },
-    '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': {
-      backgroundColor: '#3E4451'
-    },
-    '.cm-keyword': { color: '#c678dd' },
-    '.cm-operator': { color: '#56b6c2' },
-    '.cm-variable-2': { color: '#e06c75' },
-    '.cm-variable': { color: '#d19a66' },
-    '.cm-property': { color: '#61afef' },
-    '.cm-comment': { color: '#5c6370', fontStyle: 'italic' },
-    '.cm-string': { color: '#98c379' },
-    '.cm-number': { color: '#d19a66' },
-    '.cm-atom': { color: '#d19a66' },
-    '.cm-def': { color: '#61afef' },
-    '.cm-punctuation': { color: '#abb2bf' },
-    '.cm-meta': { color: '#abb2bf' },
-    '.cm-builtin': { color: '#e5c07b' },
-    '.cm-tag': { color: '#e06c75' },
-    '.cm-attribute': { color: '#d19a66' },
-    '.cm-bracket': { color: '#abb2bf' }
+    "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection":
+      {
+        backgroundColor: "#3E4451",
+      },
+    ".cm-keyword": { color: "#c678dd" },
+    ".cm-operator": { color: "#56b6c2" },
+    ".cm-variable-2": { color: "#e06c75" },
+    ".cm-variable": { color: "#d19a66" },
+    ".cm-property": { color: "#61afef" },
+    ".cm-comment": { color: "#5c6370", fontStyle: "italic" },
+    ".cm-string": { color: "#98c379" },
+    ".cm-number": { color: "#d19a66" },
+    ".cm-atom": { color: "#d19a66" },
+    ".cm-def": { color: "#61afef" },
+    ".cm-punctuation": { color: "#abb2bf" },
+    ".cm-meta": { color: "#abb2bf" },
+    ".cm-builtin": { color: "#e5c07b" },
+    ".cm-tag": { color: "#e06c75" },
+    ".cm-attribute": { color: "#d19a66" },
+    ".cm-bracket": { color: "#abb2bf" },
   }),
   indentOnInput(),
   bracketMatching(),
@@ -194,10 +216,10 @@ const baseExtensions: Extension[] = [
     activateOnTyping: true,
     maxRenderedOptions: 100,
     defaultKeymap: true,
-    icons: true
+    icons: true,
   }),
   syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-  indentUnit.of('    '),
+  indentUnit.of("    "),
   EditorState.tabSize.of(4),
   EditorView.lineWrapping,
   getFontSizeTheme(fontSize.value),
@@ -209,24 +231,24 @@ const baseExtensions: Extension[] = [
     ...completionKeymap,
     ...closeBracketsKeymap,
     ...lintKeymap,
-    indentWithTab
+    indentWithTab,
   ]),
-  EditorView.updateListener.of(update => {
+  EditorView.updateListener.of((update) => {
     if (update.docChanged) {
-      emit('code-change', update.state.doc.toString());
+      emit("code-change", update.state.doc.toString());
     }
-  })
+  }),
 ];
 
 // 获取当前语言的扩展
-const getLanguageExtension = (lang: Language['value']): Extension => {
+const getLanguageExtension = (lang: Language["value"]): Extension => {
   const langSupport = (() => {
     switch (lang) {
-      case 'javascript':
+      case "javascript":
         return javascript();
-      case 'python':
+      case "python":
         return python();
-      case 'cpp':
+      case "cpp":
         return cpp();
       default:
         return javascript();
@@ -236,47 +258,137 @@ const getLanguageExtension = (lang: Language['value']): Extension => {
   return [
     langSupport,
     autocompletion({
-      override: [langSupport.language.data.of({
-        autocomplete: async (context: CompletionContext) => {
-          const word = context.matchBefore(/\w*/);
-          if (!word) return null;
-          
-          // 这里可以添加自定义的补全项
-          const customCompletions = {
-            javascript: [
-              'console.log', 'function', 'return', 'const', 'let', 'var',
-              'if', 'else', 'for', 'while', 'do', 'switch', 'case',
-              'try', 'catch', 'finally', 'throw', 'class', 'extends',
-              'new', 'this', 'super', 'import', 'export', 'default',
-              'null', 'undefined', 'true', 'false'
-            ],
-            python: [
-              'def', 'class', 'if', 'else', 'elif', 'for', 'while',
-              'try', 'except', 'finally', 'with', 'as', 'import',
-              'from', 'return', 'yield', 'break', 'continue', 'pass',
-              'raise', 'True', 'False', 'None', 'and', 'or', 'not',
-              'is', 'in', 'lambda', 'nonlocal', 'global'
-            ],
-            cpp: [
-              'include', 'using', 'namespace', 'std', 'cout', 'cin',
-              'endl', 'return', 'if', 'else', 'for', 'while', 'do',
-              'switch', 'case', 'break', 'continue', 'class', 'struct',
-              'public', 'private', 'protected', 'virtual', 'override',
-              'template', 'typename', 'const', 'static', 'void', 'int',
-              'float', 'double', 'char', 'bool', 'string', 'vector',
-              'map', 'set', 'auto', 'nullptr', 'true', 'false'
-            ]
-          }[lang] || [];
+      override: [
+        langSupport.language.data.of({
+          autocomplete: async (context: CompletionContext) => {
+            const word = context.matchBefore(/\w*/);
+            if (!word) return null;
 
-          return {
-            from: word.from,
-            options: customCompletions
-              .filter(opt => opt.toLowerCase().startsWith(word.text.toLowerCase()))
-              .map(opt => ({ label: opt, type: 'keyword' }))
-          };
-        }
-      })]
-    })
+            // 这里可以添加自定义的补全项
+            const customCompletions =
+              {
+                javascript: [
+                  "console.log",
+                  "function",
+                  "return",
+                  "const",
+                  "let",
+                  "var",
+                  "if",
+                  "else",
+                  "for",
+                  "while",
+                  "do",
+                  "switch",
+                  "case",
+                  "try",
+                  "catch",
+                  "finally",
+                  "throw",
+                  "class",
+                  "extends",
+                  "new",
+                  "this",
+                  "super",
+                  "import",
+                  "export",
+                  "default",
+                  "null",
+                  "undefined",
+                  "true",
+                  "false",
+                ],
+                python: [
+                  "def",
+                  "class",
+                  "if",
+                  "else",
+                  "elif",
+                  "for",
+                  "while",
+                  "try",
+                  "except",
+                  "finally",
+                  "with",
+                  "as",
+                  "import",
+                  "from",
+                  "return",
+                  "yield",
+                  "break",
+                  "continue",
+                  "pass",
+                  "raise",
+                  "True",
+                  "False",
+                  "None",
+                  "and",
+                  "or",
+                  "not",
+                  "is",
+                  "in",
+                  "lambda",
+                  "nonlocal",
+                  "global",
+                ],
+                cpp: [
+                  "include",
+                  "using",
+                  "namespace",
+                  "std",
+                  "cout",
+                  "cin",
+                  "endl",
+                  "return",
+                  "if",
+                  "else",
+                  "for",
+                  "while",
+                  "do",
+                  "switch",
+                  "case",
+                  "break",
+                  "continue",
+                  "class",
+                  "struct",
+                  "public",
+                  "private",
+                  "protected",
+                  "virtual",
+                  "override",
+                  "template",
+                  "typename",
+                  "const",
+                  "static",
+                  "void",
+                  "int",
+                  "float",
+                  "double",
+                  "char",
+                  "bool",
+                  "string",
+                  "vector",
+                  "map",
+                  "set",
+                  "auto",
+                  "nullptr",
+                  "true",
+                  "false",
+                ],
+              }[lang] || [];
+
+            return {
+              from: word.from,
+              options: customCompletions
+                .filter((opt) =>
+                  opt.toLowerCase().startsWith(word.text.toLowerCase())
+                )
+                .map((opt) => ({ label: opt, type: "keyword" })),
+            };
+          },
+        }),
+      ],
+    }),
   ];
 };
 
@@ -286,60 +398,64 @@ const createEditor = (container: HTMLElement, initialCode: string) => {
     doc: initialCode,
     extensions: [
       ...baseExtensions,
-      getLanguageExtension(selectedLanguage.value)
-    ]
+      getLanguageExtension(selectedLanguage.value),
+    ],
   });
 
   const view = new EditorView({
     state,
-    parent: container
+    parent: container,
   });
 
   // 添加滚轮事件监听
-  container.addEventListener('wheel', handleWheel, { passive: false });
+  container.addEventListener("wheel", handleWheel, { passive: false });
 
   return view;
 };
 
 // 处理语言切换
-const handleLanguageChange = (lang: Language['value']) => {
+const handleLanguageChange = (lang: Language["value"]) => {
   if (!editorView.value) return;
   selectedLanguage.value = lang;
-  
+
   const extensions = [
     ...baseExtensions,
     materialDark,
     syntaxHighlighting(defaultHighlightStyle),
     (() => {
       switch (lang) {
-        case 'javascript':
+        case "javascript":
           return javascript();
-        case 'python':
+        case "python":
           return python();
-        case 'cpp':
+        case "cpp":
           return cpp();
         default:
           return javascript();
       }
-    })()
+    })(),
   ];
 
   const newState = EditorState.create({
     doc: codeTemplates[lang],
-    extensions
+    extensions,
   });
 
   editorView.value.setState(newState);
-  emit('code-change', codeTemplates[lang]);
+  emit("code-change", codeTemplates[lang]);
 };
 
 // 提交代码
 const handleSubmit = async () => {
   if (!editorView.value) return;
-  
+
   submitting.value = true;
   try {
-    emit('submit', editorView.value.state.doc.toString(), selectedLanguage.value);
+    emit(
+      "submit",
+      editorView.value.state.doc.toString(),
+      selectedLanguage.value
+    );
   } finally {
     submitting.value = false;
   }
@@ -348,7 +464,8 @@ const handleSubmit = async () => {
 // 组件挂载时创建编辑器
 onMounted(() => {
   if (editorContainer.value) {
-    const initialCode = props.initialCode || codeTemplates[selectedLanguage.value];
+    const initialCode =
+      props.initialCode || codeTemplates[selectedLanguage.value];
     editorView.value = createEditor(editorContainer.value, initialCode);
   }
 });
@@ -356,24 +473,27 @@ onMounted(() => {
 // 组件卸载时清理
 onBeforeUnmount(() => {
   if (editorContainer.value) {
-    editorContainer.value.removeEventListener('wheel', handleWheel);
+    editorContainer.value.removeEventListener("wheel", handleWheel);
   }
   editorView.value?.destroy();
 });
 
 // 监听 initialCode 变化
-watch(() => props.initialCode, (newCode) => {
-  if (newCode && editorView.value) {
-    const transaction = editorView.value.state.update({
-      changes: {
-        from: 0,
-        to: editorView.value.state.doc.length,
-        insert: newCode
-      }
-    });
-    editorView.value.dispatch(transaction);
+watch(
+  () => props.initialCode,
+  (newCode) => {
+    if (newCode && editorView.value) {
+      const transaction = editorView.value.state.update({
+        changes: {
+          from: 0,
+          to: editorView.value.state.doc.length,
+          insert: newCode,
+        },
+      });
+      editorView.value.dispatch(transaction);
+    }
   }
-});
+);
 </script>
 
 <style scoped>
@@ -436,7 +556,7 @@ watch(() => props.initialCode, (newCode) => {
 /* CodeMirror 6 样式覆盖 */
 :deep(.cm-editor) {
   height: 100%;
-  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
   font-size: 14px;
 }
 
@@ -488,4 +608,4 @@ watch(() => props.initialCode, (newCode) => {
 :deep(.cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected]) {
   background-color: #353b45 !important;
 }
-</style> 
+</style>

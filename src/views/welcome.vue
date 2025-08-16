@@ -7,7 +7,9 @@
       <el-main>
         <Introduce />
         <div class="btn-box">
-          <el-button id="log-btn" @click="goto('/login')"> 登录/注册 </el-button>
+          <el-button id="log-btn" @click="goto('/login')">
+            登录/注册
+          </el-button>
           <el-button id="try-btn" @click="goto('/home')"> 游客访问 </el-button>
         </div>
       </el-main>
@@ -19,7 +21,7 @@
 import Introduce from "@/components/introduce.vue";
 import headbar from "@/components/headbar.vue";
 import router from "@/router";
-function goto(s:string) {
+function goto(s: string) {
   router.push(s);
 }
 </script>
